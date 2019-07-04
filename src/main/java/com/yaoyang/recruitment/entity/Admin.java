@@ -3,18 +3,16 @@ package com.yaoyang.recruitment.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yaoyang.recruitment.base.BaseEntity;
+import com.yaoyang.recruitment.enumeration.Role;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
-import javax.persistence.*;
-import javax.persistence.Table;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 
 /**
  * 管理员
@@ -35,6 +33,9 @@ public class Admin extends BaseEntity {
     @Type(type = "text")
     @ApiModelProperty(value = "登录密码")
     private String password;
+    @ApiModelProperty(value = "角色")
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @Type(type = "text")
     private String description;
     @ApiModelProperty(value = "头像路径")
