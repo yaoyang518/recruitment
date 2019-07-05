@@ -1,6 +1,7 @@
 package com.yaoyang.recruitment.service;
 
 import com.yaoyang.recruitment.entity.Resume;
+import org.springframework.data.domain.Page;
 
 public interface ResumeService {
 
@@ -11,4 +12,6 @@ public interface ResumeService {
     Resume update(Resume resume);
 
     void delete(Resume resume);
+
+    Page<Resume> findAll(int page,int size);
 }

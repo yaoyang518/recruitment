@@ -13,6 +13,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -28,8 +29,8 @@ public class AdminController {
 
     @GetMapping("/login")
     @ApiOperation(value = "管理员登陆-后台")
-    public ApiResult login(AdminDto adminDto) {
-        String password = Md5Util.MD5(adminDto.getLoginName());
+    public ApiResult login(@Validated AdminDto adminDto) {
+        String password = Md5Util.MD5(adminDto.getPassword());
         Admin admin = adminService.findAdminByLoginNameAndPassword(adminDto.getLoginName(), password);
         if (admin == null) {
             return ApiResultBuilder.buildFailedResult(ResponseCode.NO_ADMIN);

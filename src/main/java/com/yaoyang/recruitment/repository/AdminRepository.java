@@ -11,5 +11,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long>, JpaSpecific
 
     Page<Admin> findAdminByRole(Role role, Pageable pageable);
 
+    Admin findByLoginName(String loginName);
+
     Admin findAdminByLoginNameAndPassword(String loginName, String password);
 }
