@@ -4,9 +4,11 @@ import com.yaoyang.recruitment.annotation.FilterRequest;
 import com.yaoyang.recruitment.base.ApiResult;
 import com.yaoyang.recruitment.base.ApiResultBuilder;
 import com.yaoyang.recruitment.entity.Admin;
+import com.yaoyang.recruitment.entity.OperationLog;
 import com.yaoyang.recruitment.enumeration.ResponseCode;
 import com.yaoyang.recruitment.enumeration.Role;
 import com.yaoyang.recruitment.service.AdminService;
+import com.yaoyang.recruitment.service.OperationLogService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,6 +34,8 @@ public class AspectRequest {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private OperationLogService operationLogService;
 
     @Pointcut("execution(public * com.yaoyang.recruitment.controller.*.*(..)))")
     public void log() {
@@ -43,19 +47,21 @@ public class AspectRequest {
             Class carClass = point.getTarget().getClass();
             String methodName = point.getSignature().getName();
             Method[] methods = carClass.getMethods();
+            OperationLog log = new OperationLog();
             for (int i = 0; i < methods.length; i++) {
                 if (methods[i].getName().equals(methodName)) {
                     boolean hasAnnotation = methods[i].isAnnotationPresent(FilterRequest.class);
-                    if (hasAnnotation) {
-                        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-                        HttpServletRequest request = sra.getRequest();
-                        logger.info("class_method:" + point.getSignature().getDeclaringTypeName() + "."
-                                + point.getSignature().getName());
-                        Object[] args = point.getArgs();
+                    ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+                    HttpServletRequest request = sra.getRequest();
+                    log.setContext(point.getSignature().getDeclaringTypeName() + "."
+                            + point.getSignature().getName());
+                    logger.info("class_method:" + point.getSignature().getDeclaringTypeName() + "."
+                            + point.getSignature().getName());
+                    Object[] args = point.getArgs();
 //                        for (Object arg : args) {
 //                            logger.info("arg:" + arg.toString());
 //                        }
-
+                    if (hasAnnotation) {
                         FilterRequest filterRequest = methods[i].getAnnotation(FilterRequest.class);
                         String role = filterRequest.role();
                         if ("WRITE".equalsIgnoreCase(role)) {
@@ -68,9 +74,22 @@ public class AspectRequest {
                             if(admin.getRole().equals(Role.READ)){
                                 return ApiResultBuilder.buildFailedResult(ResponseCode.PERMISSION_DENY);
                             }
+                            log.setAdmin(admin);
+                        }else if("ADMIN".equalsIgnoreCase(role)){
+                            String token = request.getHeader("x-access-token");
+                            ApiResult<Admin> result = adminService.validateToken(token);
+                            if (!result.isSuccess()) {
+                                return result;
+                            }
+                            Admin admin = result.getData();
+                            if(!admin.getRole().equals(Role.ADMIN)){
+                                return ApiResultBuilder.buildFailedResult(ResponseCode.PERMISSION_DENY);
+                            }
+                            log.setAdmin(admin);
                         }
                         break;
                     }
+                    operationLogService.save(log);
                 }
             }
         } catch (Exception e) {
