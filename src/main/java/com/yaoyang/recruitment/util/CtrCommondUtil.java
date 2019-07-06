@@ -77,6 +77,8 @@ public class CtrCommondUtil {
             }
         } catch (IOException e) {
             System.out.println("执行linux命令错误：" + e.toString());
+        }finally {
+            conn.close();
         }
 
         if (!StringUtils.isEmpty(result)) {

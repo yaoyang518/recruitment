@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ public class AdminController {
                 .signWith(SignatureAlgorithm.HS512, SiteConstants.TOKEN_KEY)
                 .setExpiration(new DateTime().plusHours(8).toDate())
                 .compact();
+        admin.setToken(token);
         return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS, admin);
     }
 
@@ -51,5 +53,12 @@ public class AdminController {
         BeanUtils.copyProperties(adminDto, admin);
         adminService.save(admin);
         return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation(value = "管理员列表-后台")
+    public ApiResult list(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Page<Admin> admins = adminService.findAll(page, size);
+        return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS, admins);
     }
 }

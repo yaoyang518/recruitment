@@ -1,7 +1,6 @@
 package com.yaoyang.recruitment.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yaoyang.recruitment.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,6 +10,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 /**
  * 操作日志
@@ -24,6 +24,7 @@ import javax.persistence.Lob;
 public class OperationLog extends BaseEntity {
 
     @ApiModelProperty(value = "操作人")
+    @ManyToOne
     @JoinColumn(name = "adminId")
     private Admin admin;
     @Lob

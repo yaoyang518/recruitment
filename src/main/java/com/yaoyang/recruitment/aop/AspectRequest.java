@@ -87,9 +87,9 @@ public class AspectRequest {
                             }
                             log.setAdmin(admin);
                         }
+                        operationLogService.save(log);
                         break;
                     }
-                    operationLogService.save(log);
                 }
             }
         } catch (Exception e) {

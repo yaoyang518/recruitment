@@ -21,7 +21,7 @@ public class SysController {
     @FilterRequest(role = "ADMIN")
     @PostMapping("/deploy")
     @ApiOperation(value = "重启系统-后台")
-    public ApiResult applyFinish() {
+    public ApiResult deploy() {
         Connection connection = CtrCommondUtil.getConn("101.36.153.228", "root", 22, "yhDN489KiZ");
         CtrCommondUtil.doCommond(connection,"/root/deploy.sh");
         return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS);

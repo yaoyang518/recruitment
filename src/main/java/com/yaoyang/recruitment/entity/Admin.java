@@ -1,7 +1,6 @@
 package com.yaoyang.recruitment.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yaoyang.recruitment.base.BaseEntity;
 import com.yaoyang.recruitment.enumeration.Role;
 import io.swagger.annotations.ApiModel;
@@ -43,7 +42,6 @@ public class Admin extends BaseEntity {
     private String image;
     @ApiModelProperty(value = "通行令牌")
     @Type(type = "text")
-    @JsonIgnore
     private String token;
 
 }

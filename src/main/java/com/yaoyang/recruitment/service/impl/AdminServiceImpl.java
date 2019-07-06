@@ -69,6 +69,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Page<Admin> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return adminRepository.findAll(pageable);
+    }
+
+    @Override
     public ApiResult validateToken(String token) {
         if (StringUtils.isEmpty(token)) {
             return ApiResultBuilder.buildFailedResult(ResponseCode.TOKEN_NULL);

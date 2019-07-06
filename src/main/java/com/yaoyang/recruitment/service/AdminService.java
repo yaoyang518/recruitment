@@ -21,6 +21,8 @@ public interface AdminService {
 
     Page<Admin> findAdminByRole(Role role, int page, int size);
 
+    Page<Admin> findAll(int page, int size);
+
     ApiResult validateToken(String token);
 
 
