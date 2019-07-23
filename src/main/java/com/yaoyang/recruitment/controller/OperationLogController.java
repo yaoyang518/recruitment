@@ -7,4 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = "操作日志")
 @RestController
 @RequestMapping("/api/operationlog")
-public class OperationLogController{}
+public class OperationLogController{
+
+
+}

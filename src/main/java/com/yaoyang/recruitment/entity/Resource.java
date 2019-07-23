@@ -24,4 +24,7 @@ public class Resource extends BaseEntity {
 
     @ApiModelProperty(value = "资源路径")
     private String url;
+
+    @ApiModelProperty(value = "文件名")
+    private String name;
 }
