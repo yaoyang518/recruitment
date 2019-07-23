@@ -1,7 +1,9 @@
 package com.yaoyang.recruitment.dto;
 
 
+import com.yaoyang.recruitment.enumeration.ApplyType;
 import com.yaoyang.recruitment.enumeration.Education;
+import com.yaoyang.recruitment.enumeration.MessageSource;
 import com.yaoyang.recruitment.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -58,5 +60,13 @@ public class ResumeDto{
     private String hopeSalary;
     @ApiModelProperty(value = "应聘岗位")
     private String applyJob;
+    @ApiModelProperty(value = "招聘信息来源")
+    private MessageSource messageSource;
+    @ApiModelProperty(value = "应聘方式")
+    private ApplyType applyType;
+    @ApiModelProperty(value = "推荐人")
+    private String referrer;
+    @ApiModelProperty(value = "猎头")
+    private String headhunter;
 
 }

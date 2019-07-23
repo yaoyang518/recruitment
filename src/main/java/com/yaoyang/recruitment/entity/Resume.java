@@ -1,19 +1,18 @@
 package com.yaoyang.recruitment.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yaoyang.recruitment.base.BaseEntity;
+import com.yaoyang.recruitment.enumeration.ApplyType;
 import com.yaoyang.recruitment.enumeration.Education;
+import com.yaoyang.recruitment.enumeration.MessageSource;
 import com.yaoyang.recruitment.enumeration.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Lob;
 import java.util.Date;
 
 /**
@@ -67,4 +66,15 @@ public class Resume extends BaseEntity {
     private String hopeSalary;
     @ApiModelProperty(value = "应聘岗位")
     private String applyJob;
+    @ApiModelProperty(value = "招聘信息来源")
+    @Enumerated(EnumType.STRING)
+    private MessageSource messageSource;
+    @ApiModelProperty(value = "应聘方式")
+    @Enumerated(EnumType.STRING)
+    private ApplyType applyType;
+    @ApiModelProperty(value = "推荐人")
+    private String referrer;
+    @ApiModelProperty(value = "猎头")
+    private String headhunter;
+
 }
