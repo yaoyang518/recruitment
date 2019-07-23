@@ -1,11 +1,12 @@
 package com.yaoyang.recruitment.service;
 
 import com.yaoyang.recruitment.entity.Resource;
-import com.yaoyang.recruitment.entity.Resume;
 
 public interface ResourceService {
 
     Resource findById(Long id);
+
+    Resource findByResumeId(Long resumeId);
 
     Resource save(Resource resource);
 

@@ -19,8 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 @Api(tags = "简历")
 @RestController
@@ -68,7 +68,10 @@ public class ResumeController {
             System.out.println(newFile.getAbsolutePath());
             // 上传图片到 -》 “绝对路径”
             file.transferTo(newFile);
-            Resource resource = new Resource();
+            Resource resource = resourceService.findByResumeId(resumeId);
+            if (resource == null) {
+                resource = new Resource();
+            }
             resource.setResumeId(resumeId);
             resource.setUrl(fileDir.getAbsolutePath() + File.separator + newFileName);
             resource.setName(newFileName);
@@ -79,13 +82,30 @@ public class ResumeController {
         return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS);
     }
 
-    private String getFileName() {
-        return DateUtil.getDate("yyyyMMddHHmmsss") + "_" + StringUtil.getRandomString(4);
+    @PostMapping("/downloadRsume")
+    @ApiOperation(value = "下载简历-前段")
+    public ApiResult downloadRsume(Long resumeId, HttpServletResponse response) throws IOException {
+        Resource resource = resourceService.findByResumeId(resumeId);
+        File file = new File(resource.getUrl());
+        // 以流的形式下载文件。
+        InputStream fis = new BufferedInputStream(new FileInputStream(resource.getUrl()));
+        byte[] buffer = new byte[fis.available()];
+        fis.read(buffer);
+        fis.close();
+        // 清空response
+        response.reset();
+        // 设置response的Header
+        response.addHeader("Content-Disposition", "attachment;filename=" + new String("Rsume".getBytes()));
+        response.addHeader("Content-Length", "" + file.length());
+        OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+        response.setContentType("application/octet-stream");
+        toClient.write(buffer);
+        toClient.flush();
+        toClient.close();
+        return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS);
     }
 
-    public static void main(String[] args) {
-        String s = "zhongguofengdaodeliyizhanbanzhijing_3744115.jpg";
-        System.out.println(s.substring(s.lastIndexOf("."), s.length()));
-
+    private String getFileName() {
+        return DateUtil.getDate("yyyyMMddHHmmsss") + "_" + StringUtil.getRandomString(4);
     }
 }

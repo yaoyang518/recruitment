@@ -23,6 +23,11 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public Resource findByResumeId(Long resumeId) {
+        return resourceRepository.findByResumeId(resumeId);
+    }
+
+    @Override
     public Resource save(Resource resource) {
         return resourceRepository.saveAndFlush(resource);
     }
