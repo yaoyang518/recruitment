@@ -102,7 +102,7 @@ public class ResumeController {
         toClient.write(buffer);
         toClient.flush();
         toClient.close();
-        return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS);
+        return null;
     }
 
     private String getFileName() {
