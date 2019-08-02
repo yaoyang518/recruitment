@@ -40,6 +40,29 @@ public class ResumeController {
         return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS, resume);
     }
 
+    @PutMapping("/update")
+    @ApiOperation(value = "修改简历-前段")
+    public ApiResult updateResume(@RequestBody ResumeDto resumeDto) {
+        if(resumeDto.getId()==null){
+            return ApiResultBuilder.buildFailedResult(ResponseCode.PARAM_ILLEGAL);
+        }
+        Resume resume = new Resume();
+        BeanUtils.copyProperties(resumeDto, resume);
+        resumeService.update(resume);
+        return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS, resume);
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "删除简历-后台")
+    public ApiResult creatResume(@PathVariable Long id) {
+        Resume resume = resumeService.findById(id);
+        if (resume == null) {
+            return ApiResultBuilder.buildFailedResult(ResponseCode.OPT_FAIL, "简历不存在");
+        }
+        resumeService.delete(resume);
+        return ApiResultBuilder.buildSuccessResult(ResponseCode.OPT_SUCCESS);
+    }
+
     @GetMapping("/list")
     @ApiOperation(value = "简历列表-后台")
     public ApiResult list(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {

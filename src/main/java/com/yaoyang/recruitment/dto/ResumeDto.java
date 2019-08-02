@@ -20,8 +20,10 @@ import java.util.Date;
  */
 @Data
 @ApiModel(value = "简历")
-public class ResumeDto{
+public class ResumeDto {
 
+    @ApiModelProperty(value = "id")
+    private Long id;
     @ApiModelProperty(value = "姓名")
     @NotBlank(message = "姓名不能为空")
     private String name;
