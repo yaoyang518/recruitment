@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/admin")
 public class SysController {
 
-
     @FilterRequest(role = "ADMIN")
     @PostMapping("/deploy")
     @ApiOperation(value = "重启系统-后台")
