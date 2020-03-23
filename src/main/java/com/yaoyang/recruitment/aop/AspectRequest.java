@@ -58,9 +58,6 @@ public class AspectRequest {
                     logger.info("class_method:" + point.getSignature().getDeclaringTypeName() + "."
                             + point.getSignature().getName());
                     Object[] args = point.getArgs();
-//                        for (Object arg : args) {
-//                            logger.info("arg:" + arg.toString());
-//                        }
                     if (hasAnnotation) {
                         FilterRequest filterRequest = methods[i].getAnnotation(FilterRequest.class);
                         String role = filterRequest.role();
